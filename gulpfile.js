@@ -66,12 +66,11 @@ gulp.task('buildCSS', function () {
 
 gulp.task('buildJS', function () {
     return gulp.src(sourcePaths.js)
-        .pipe(concat(distPaths.js_build_file))
         .pipe(babel())
-        .pipe(uglify())
-        .pipe(uglify().on('error', function(e){
-          console.log(e);
-       }))
+        .pipe(concat(distPaths.js_build_file))
+        .on('error', function() {
+          console.log('sth');
+        })
         .pipe(gulp.dest(distPaths.build));
 });
 
@@ -81,8 +80,7 @@ gulp.task('buildIndex', function () {
             'css': distPaths.css_build_file,
             'js': distPaths.js_build_file
         }))
-        .pipe(minifyHTML())
-        .pipe(rename('index.html'))
+          .pipe(rename('index.html'))
         .pipe(gulp.dest(distPaths.build));
 });
 

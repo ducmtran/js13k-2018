@@ -1,38 +1,36 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-
-var lastTime, current, dt;
-
 // initialize global variables, state etc
 function init() {
-  state = 'playing'; //playing, paused
+  state = 'menu'; //playing, paused, menu
   fragments = [];
-  grid.initialize(3);
+  // fragments.push(ship);
 
   // fragments.push(create_fragment(100, 200, 0, -2, 'red'));
-  // fragments.push(create_fragment(100, 300, 0, -3, 'blue'));
+  // fragments.push(create_fragment(250, 100, 1, 0, 'blue'));
   // fragments.push(create_fragment(300, 100, -3, 0, 'red'));
   // fragments.push(create_fragment(230, 100, -2, 0, 'blue'));
-  spawnRandomFragments(8);
+  // spawnRandomFragments(4);
 }
 
 let loop_k = kontra.gameLoop({
   fps: 60,
   clearCanvas: true,
   update: function (dt) {
-    ship.handleInput();
-    ship.update();
-    collision();
-    for (let i = 0; i < fragments.length; i++) {
-      fragments[i].update();
+
+    if (state == 'playing') {
+      states.playing.update();
+    } else if (state == 'menu') {
+      states.menu.update();
     }
+
+    // input update
+    Key.update();
   },
   render: function () {
-    grid.render();
-    for (let i = 0; i < fragments.length; i++) {
-      fragments[i].render();
+    if (state == 'playing') {
+      states.playing.render();
+    } else if (state =='menu') {
+      states.menu.render();
     }
-    ship.render();
   }
 })
 
