@@ -1,5 +1,5 @@
 let asteroid = new Image();
-asteroid.src = '/art/asteroid.png';
+asteroid.src = './art/asteroid.png';
 function spawnFragments() {
   let fragment = kontra.sprite({
     name: 'fragment',
