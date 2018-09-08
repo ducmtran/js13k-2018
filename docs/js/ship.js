@@ -1,5 +1,5 @@
 let player = new Image();
-player.src = '../art/player.png';
+player.src = './art/player.png';
 
 var playerSprite = kontra.spriteSheet({
   image: player,
