@@ -8,7 +8,7 @@ var playerSprite = kontra.spriteSheet({
   animations: {
     walk: {
       frames: '0..1',
-      frameRate: 1,
+      frameRate: 1
     }
   }
 
@@ -41,30 +41,33 @@ var ship = kontra.sprite({
       this.barrier[1] +
       this.barrier[2] +
       this.barrier[3];
+    this.barrier = [0,0,0,0];
 
     // barrier
-    if (Key.isDown(Key.W) && active_barrier < 3) {
+    if (Key.isDown(Key.W) && active_barrier < 2) {
       this.barrier[0] = 1;
     } else this.barrier[0] = 0;
-    if (Key.isDown(Key.A) && active_barrier < 3) {
+    active_barrier = this.barrier[0] +
+      this.barrier[1] +
+      this.barrier[2] +
+      this.barrier[3];
+    if (Key.isDown(Key.A) && active_barrier < 2) {
       this.barrier[1] = 1;
     } else this.barrier[1] = 0;
-    if (Key.isDown(Key.S) && active_barrier < 3) {
+    active_barrier = this.barrier[0] +
+      this.barrier[1] +
+      this.barrier[2] +
+      this.barrier[3];
+    if (Key.isDown(Key.S) && active_barrier < 2) {
       this.barrier[2] = 1;
     } else this.barrier[2] = 0;
-    if (Key.isDown(Key.D) && active_barrier < 3) {
+    active_barrier = this.barrier[0] +
+      this.barrier[1] +
+      this.barrier[2] +
+      this.barrier[3];
+    if (Key.isDown(Key.D) && active_barrier < 2) {
       this.barrier[3] = 1;
     } else this.barrier[3] = 0;
-
-    // grab/ungrab
-    if (Key.released(Key.SPACE)) {
-      console.log('grab');
-      if (!this.isGrabbing) {
-        this.grab();
-      } else {
-        this.ungrab();
-      }
-    }
   },
 
   handleCollision: function (direction) {
@@ -78,10 +81,7 @@ var ship = kontra.sprite({
   },
 
   clearColliding: function () {
-    this.colliding[0] = 0;
-    this.colliding[1] = 0;
-    this.colliding[2] = 0;
-    this.colliding[3] = 0;
+    this.colliding = [0,0,0,0];
   },
 
   grab: function () {
@@ -109,13 +109,6 @@ var ship = kontra.sprite({
     this.grabbing = -1;
   },
 
-  reset: function () {
-    this.x = 100;
-    this.y = 100;
-    this.dx = 2;
-    this.dy = 0;
-  },
-  
   update: function () {
     // handle bound
     if (this.x < GAME_X) this.dx = Math.abs(this.dx);
@@ -130,14 +123,33 @@ var ship = kontra.sprite({
     if (this.dy < -this.maxSpeed) this.dy = -this.maxSpeed;
 
     // handle barrier
-    for (let i=0; i<4; i++) {
+    for (let i = 0; i < 4; i++) {
       if (this.colliding[i] > this.barrier[i]) {
-        G.state = 'lost';
+        S.playing.resetLevel = true;
         break;
       }
     }
 
     this.advance();
   },
+
+  render: function () {
+    ctx.save();
+    ctx.strokeStyle = 'blue';
+    for (let i = 0; i < 4; i++) {
+      if (this.barrier[i] == 1) {
+        ctx.beginPath();
+        ctx.arc(this.x + this.width / 2,
+          this.y + this.height / 2,
+          28,
+          Math.PI / 4 * (-3 - 2*i),
+          Math.PI / 4 * (-1 - 2*i));
+        ctx.stroke()
+      }
+    }
+    ctx.restore();
+    this.draw();
+
+  }
 
 });

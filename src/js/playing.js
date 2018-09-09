@@ -7,10 +7,10 @@ S.playing = {
     if (this.resetLevel) {
       if (G.levels[this.level] == undefined) {
         G.state = "gameover";
+        return;
       }
       G.levels[this.level].load();
       this.resetLevel = false;
-      ship.reset();
     }
     ship.handleInput();
 
