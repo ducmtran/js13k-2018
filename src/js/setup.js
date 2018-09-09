@@ -13,5 +13,8 @@ const BOUND_Y = GAME_Y + GAME_H - OBJ_SIZE;
 
 // store all states of the game in here
 // menu, playing, over
-var states = {};
-var levels = {};
+var S = {};
+
+// store all global variables in here
+// fragments, state, levels 
+var G = {}

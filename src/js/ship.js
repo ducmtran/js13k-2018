@@ -13,6 +13,7 @@ var playerSprite = kontra.spriteSheet({
   }
 
 })
+
 var ship = kontra.sprite({
   name: 'player',
   x: 100,
@@ -84,12 +85,12 @@ var ship = kontra.sprite({
   },
 
   grab: function () {
-    for (let i = 0; i < fragments.length; i++) {
+    for (let i = 0; i < G.fragments.length; i++) {
       // check nearby with x axis first
-      if (Math.abs(this.x - fragments[i].x) < 50) {
-        if (distanceSquared(this, fragments[i]) < 900) {
+      if (Math.abs(this.x - G.fragments[i].x) < 50) {
+        if (distanceSquared(this, G.fragments[i]) < 900) {
           // match speed with fragment
-          fragments[i].grabbed = true;
+          G.fragments[i].grabbed = true;
           this.isGrabbing = true;
           this.grabbing = i;
           this.dx = 0;
@@ -104,10 +105,17 @@ var ship = kontra.sprite({
 
   ungrab: function () {
     this.isGrabbing = false;
-    fragments[this.grabbing].grabbed = false;
+    G.fragments[this.grabbing].grabbed = false;
     this.grabbing = -1;
   },
 
+  reset: function () {
+    this.x = 100;
+    this.y = 100;
+    this.dx = 2;
+    this.dy = 0;
+  },
+  
   update: function () {
     // handle bound
     if (this.x < GAME_X) this.dx = Math.abs(this.dx);
@@ -124,7 +132,7 @@ var ship = kontra.sprite({
     // handle barrier
     for (let i=0; i<4; i++) {
       if (this.colliding[i] > this.barrier[i]) {
-        state = 'lost';
+        G.state = 'lost';
         break;
       }
     }

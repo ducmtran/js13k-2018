@@ -7,7 +7,8 @@ var goal = kontra.sprite({
   winLogic: function() {
     if (ship.x + ship.width + 5 > this.x) {
       if (200 < ship.y && ship.y < 300) {
-        state = 'won';
+        S.playing.level++;
+        S.playing.resetLevel = true;
       }
     }
   }

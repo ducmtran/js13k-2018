@@ -3,8 +3,8 @@ function collision() {
   let direction;
   // console.log(collision_pair);
   for (let i = 0; i < collision_pair.length; i++) {
-    let f1 = fragments[collision_pair[i][0]];
-    let f2 = fragments[collision_pair[i][1]];
+    let f1 = G.fragments[collision_pair[i][0]];
+    let f2 = G.fragments[collision_pair[i][1]];
 
     if (f1.name == 'player') {
       direction = resolveCollision(f2, f1);
@@ -54,8 +54,8 @@ function active_collision() {
   let active = [];
   let collision_check = [];
 
-  for (let i = 0; i < fragments.length; i++) {
-    let b = fragments[i].x;
+  for (let i = 0; i < G.fragments.length; i++) {
+    let b = G.fragments[i].x;
     let e = b + OBJ_SIZE;
     frags.push({ item: i, b: b, e: e })
   }
@@ -65,7 +65,7 @@ function active_collision() {
 
   for (let i = 0; i < frags.length; i++) {
     for (let j = 0; j < active.length; j++) {
-      if (active[j].e + 5 < frags[i].b) {
+      if (active[j].e + 3 < frags[i].b) {
         // remove item
         for (let k = j; k < active.length - 1; k++) {
           active[k] = active[k + 1];
@@ -89,7 +89,7 @@ function getNormalVector(f1, f2) {
   let overlapX = f1.width / 2 + f2.width / 2 - Math.abs(n.x);
   let overlapY = f1.height / 2 + f2.height / 2 - Math.abs(n.y);
 
-  if (overlapX >= -5 && overlapY >= -5) { // add 5px to overlap check
+  if (overlapX >= -3 && overlapY >= -3) { // add 5px to overlap check
     if (overlapX > overlapY) {
       if (v.y < 0) {
         normalVector.x = 0;
