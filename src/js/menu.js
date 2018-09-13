@@ -1,13 +1,13 @@
 S.menu = {
   update: function () {
 
-    // initialize G.fragments + player
-    if (G.fragments.length == 0) {
-      spawnRandomFragments(7);
+    // initialize G.asteroids + player
+    if (G.asteroids.length == 0) {
+      spawnRandomAsteroids(7);
     }
     collision();
-    for (let i = 0; i < G.fragments.length; i++) {
-      G.fragments[i].update();
+    for (let i = 0; i < G.asteroids.length; i++) {
+      G.asteroids[i].update();
     };
 
     if (Key.released(Key.SPACE)) {
@@ -18,22 +18,30 @@ S.menu = {
 
   },
   render: function () {
-    // render G.fragments
-    for (let i = 0; i < G.fragments.length; i++) {
-      G.fragments[i].render();
+    // render G.asteroids
+    for (let i = 0; i < G.asteroids.length; i++) {
+      G.asteroids[i].render();
     }
     // render scene
     ctx.save();
-    ctx.beginPath();
     ctx.globalAlpha = 0.4;
     ctx.fillStyle = 'blue';
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     ctx.closePath();
     ctx.restore();
-    // render text
+    // render text holder
     ctx.save();
-    ctx.font = 'small-caps bold 50px cursive';
-    ctx.fillText("Press Space to play",CANVAS_W/6, CANVAS_H/2);
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = '#020811';
+    ctx.fillRect(CANVAS_W/4, CANVAS_H/4, CANVAS_W/2, CANVAS_H/2);
+    // render text
+    ctx.fillStyle = 'white';
+    ctx.font = 'small-caps 30px verdana';
+    ctx.fillText("FRIENDLY ALIEN", CANVAS_W/4 + 75, CANVAS_H/2-50, 300);
+    ctx.font = 'small-caps 15px verdana';
+    ctx.fillText("PRESS SPACE TO PLAY", CANVAS_W/4 + 120, CANVAS_H/2, 300);
+    ctx.font = 'small-caps 15px verdana';
+    ctx.fillText("arrow to move", CANVAS_W/3+ 80, CANVAS_H/2 + 50, 200);
     ctx.restore();
 
   }

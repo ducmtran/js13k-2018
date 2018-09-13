@@ -1,8 +1,8 @@
 let asteroid = new Image();
-asteroid.src = './art/asteroid.png';
-function spawnFragment(values) {
+asteroid.src = './art/meteor2.png';
+function spawnAsteroid(values) {
   let fragment = kontra.sprite({
-    name: 'fragment',
+    type: 'asteroid',
     x: GAME_X + values[0],
     y: GAME_Y + values[1],
     color: '#808000',
@@ -11,20 +11,13 @@ function spawnFragment(values) {
     image: asteroid,
     dx: values[2],
     dy: values[3],
-    maxSpeed: 4,
+    maxSpeed: 10,
 
     update: function () {
       if (this.x < GAME_X) this.dx = Math.abs(this.dx);
       if (this.x > BOUND_X) this.dx = -Math.abs(this.dx);
       if (this.y > BOUND_Y) this.dy = -Math.abs(this.dy);
       if (this.y < GAME_Y) this.dy = Math.abs(this.dy);
-      if (this.grabbed) {
-        this.ddx = ship.ddx;
-        this.ddy = ship.ddy;
-      } else {
-        this.ddx = 0;
-        this.ddy = 0;
-      }
 
       // limit speed
       if (this.dx > this.maxSpeed) this.dx = this.maxSpeed;
@@ -35,17 +28,17 @@ function spawnFragment(values) {
       this.advance();
 
       if (this.grabbed) {
-        ship.x = this.x;
-        ship.y = this.y;
+        player.x = this.x;
+        player.y = this.y;
       }
     },
   })
   return fragment;
 }
 
-function spawnRandomFragments(n) {
+function spawnRandomAsteroids(n) {
   for (let i = 0; i < n; i++) {
-    G.fragments.push(spawnFragment(
+    G.asteroids.push(spawnAsteroid(
                             [Math.floor(Math.random() * BOUND_X + 1),
                             Math.floor(Math.random() * BOUND_Y + 1),
                             Math.random() * 3 - 1.5,

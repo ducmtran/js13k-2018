@@ -1,16 +1,9 @@
 // initialize global variables, state etc
 function init() {
-  G.state = 'menu'; //playing, paused, menu
-  G.levels = [level_1, level_2];
-  G.fragments = [];
+  G.state = 'menu';
+  G.levels = [level_1, level_2, level_3, level_4, level_5, level_6, level_7, level_8];
+  G.asteroids = [];
   background.randomizeStar();
-  // fragments.push(ship);
-
-  // fragments.push(create_fragment(100, 200, 0, -2, 'red'));
-  // fragments.push(create_fragment(250, 100, 1, 0, 'blue'));
-  // fragments.push(create_fragment(300, 100, -3, 0, 'red'));
-  // fragments.push(create_fragment(230, 100, -2, 0, 'blue'));
-  // spawnRandomFragments(4);
 }
 
 let loop_k = kontra.gameLoop({
@@ -19,29 +12,32 @@ let loop_k = kontra.gameLoop({
   update: function (dt) {
 
     if (G.state == 'playing') {
-      S.playing.update();
+      S.playing.update(dt);
     } else if (G.state == 'menu') {
       S.menu.update();
-    } else if (G.state == 'won_screen') {
-      
+    } else if (G.state == 'level_won') {
+      S.level_won.update(dt);
+    } else if (G.state == 'gameover') {
+      S.gameover.update();
     }
 
     // input update
     Key.update();
   },
   render: function () {
+
     background.render();
 
     if (G.state == 'playing') {
       S.playing.render();
-    } else if (G.state =='menu') {
+    } else if (G.state == 'menu') {
       S.menu.render();
+    } else if (G.state == 'level_won') {
+      S.level_won.render();
+    } else if (G.state == 'gameover') {
+      S.gameover.render();
     }
   }
 })
-
 init();
 loop_k.start();
-// setInterval(loop, 16);
-
-// setInterval(loop);

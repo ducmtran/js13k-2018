@@ -1,20 +1,17 @@
 function collision() {
   let collision_pair = active_collision();
   let direction;
-  // console.log(collision_pair);
   for (let i = 0; i < collision_pair.length; i++) {
-    let f1 = G.fragments[collision_pair[i][0]];
-    let f2 = G.fragments[collision_pair[i][1]];
+    let f1 = G.asteroids[collision_pair[i][0]];
+    let f2 = G.asteroids[collision_pair[i][1]];
 
-    if (f1.name == 'player') {
-      direction = resolveCollision(f2, f1);
-      ship.handleCollision(direction);
-    } else if (f2.name == 'player') {
-      direction = resolveCollision(f1, f2);
-      ship.handleCollision(direction);
-    } else {
-      resolveCollision(f1, f2);
+    if (f1.type == 'player' || f2.type == 'player') {
+      if (resolveCollision(f1,f2) != undefined) {
+        S.playing.resetLevel = true;
+        return;
+      }
     }
+      resolveCollision(f1, f2);
   }
 }
 
@@ -24,24 +21,21 @@ function resolveCollision(f1, f2) {
 
   let rV = kontra.vector(f2.dx - f1.dx, f2.dy - f1.dy);
   let impulse = getNormalVector(f1, f2);
-  if (impulse == undefined) return;
+  if (impulse.x == 0 && impulse.y == 0) return;
 
   // resolve intersecting/jittering objects
   // when 2 objs overlap, only resolve if direction is correct
   if (f1.dx > 0 && !(f2.dx > 0) && impulse.x == -1) {
-    console.log(12);
     return;
   }
   if (f1.dy > 0 && !(f2.dy > 0) && impulse.y == -1) {
-    console.log(11);
     return;
   }
 
-  let j = -2 * (rV.x * impulse.x + rV.y * impulse.y) * 5; //mass 10 for each
+  let j = -1.98 * (rV.x * impulse.x + rV.y * impulse.y) * 5; //mass 10 for each
 
   f1.dx -= (1 / 10) * impulse.x * j;
   f1.dy -= (1 / 10) * impulse.y * j;
-
   f2.dx += (1 / 10) * impulse.x * j;
   f2.dy += (1 / 10) * impulse.y * j;
 
@@ -54,8 +48,8 @@ function active_collision() {
   let active = [];
   let collision_check = [];
 
-  for (let i = 0; i < G.fragments.length; i++) {
-    let b = G.fragments[i].x;
+  for (let i = 0; i < G.asteroids.length; i++) {
+    let b = G.asteroids[i].x;
     let e = b + OBJ_SIZE;
     frags.push({ item: i, b: b, e: e })
   }
@@ -89,7 +83,7 @@ function getNormalVector(f1, f2) {
   let overlapX = f1.width / 2 + f2.width / 2 - Math.abs(n.x);
   let overlapY = f1.height / 2 + f2.height / 2 - Math.abs(n.y);
 
-  if (overlapX >= -3 && overlapY >= -3) { // add 5px to overlap check
+  if (overlapX >= 0 && overlapY >= 0) { // add 5px to overlap check
     if (overlapX > overlapY) {
       if (v.y < 0) {
         normalVector.x = 0;

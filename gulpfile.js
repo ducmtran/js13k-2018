@@ -5,7 +5,7 @@ var gulp          = require('gulp'),
     concat        = require('gulp-concat'),
     minifyCSS     = require('gulp-minify-css'),
     rename        = require('gulp-rename'),
-    uglify        = require('gulp-uglify'),
+    uglify        = require('gulp-uglifyes'),
     jshint        = require('gulp-jshint'),
     minifyHTML    = require('gulp-minify-html'),
     replaceHTML   = require('gulp-html-replace'),
@@ -25,7 +25,7 @@ var gulp          = require('gulp'),
     distPaths = {
         build: '_build',
         js_build_file: 'game.min.js',
-        css_build_file: 'game.min..css'
+        css_build_file: 'game.min.css'
     },
 
     sourcePaths = {
@@ -33,8 +33,21 @@ var gulp          = require('gulp'),
             'src/css/*.css', 
         ],
         js: [
-            'src/js/game.js', 
-            'src/js/*.js'
+          "src/js/kontra.js",
+          "src/js/input.js",
+          "src/js/setup.js",
+          "src/js/physics.js",
+          "src/js/asteroids.js",
+          "src/js/player.js",
+          "src/js/menu.js",
+          "src/js/playing.js",
+          "src/js/level_won.js",
+          "src/js/station.js",
+          "src/js/gameover.js",
+          "src/js/grid.js",
+          "src/js/levels.js",
+          "src/js/background.js",
+          "src/js/game.js"
         ],
         mainHtml: [
             'src/index.html' 
@@ -66,7 +79,10 @@ gulp.task('buildCSS', function () {
 
 gulp.task('buildJS', function () {
     return gulp.src(sourcePaths.js)
-        .pipe(babel())
+        .pipe(uglify({ 
+          mangle: false, 
+          ecma: 6 
+       }))
         .pipe(concat(distPaths.js_build_file))
         .on('error', function() {
           console.log('sth');
@@ -81,6 +97,7 @@ gulp.task('buildIndex', function () {
             'js': distPaths.js_build_file
         }))
           .pipe(rename('index.html'))
+          .pipe(minifyHTML())
         .pipe(gulp.dest(distPaths.build));
 });
 

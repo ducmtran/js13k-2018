@@ -18,3 +18,6 @@ var S = {};
 // store all global variables in here
 // fragments, state, levels 
 var G = {}
+
+// import asteroid image
+kontra.init();
